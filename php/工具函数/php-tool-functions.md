@@ -5,9 +5,12 @@
 
 ~~~
 /**
-* 检查一个get或者post数据是否含有注入语句
+* 检查一个数据是否含有注入语句
+* 
+* 使用preg_match()搜索是否存在敏感字符, 存在返回匹配次数1,不存在返回匹配次数0
+* 忽略大小写
 * @param string $str 输入的字符串
-* @return bool
+* @return int
 **/
 function inject_check($str) 
 {
