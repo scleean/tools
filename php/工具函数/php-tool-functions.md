@@ -1,8 +1,9 @@
 # PHP 工具函数 - 安全验证
 
 
-#### 检查mysql注入
+## 安全处理
 
+#### 检查mysql注入
 ~~~
 /**
 * 检查一个数据是否含有注入语句
@@ -18,9 +19,13 @@ function inject_check($str)
     return $check;
 }
 ~~~
+>使用 echo injCheck('1 or 1=1');
 
-#### 浏览器检测 
-> 判断是不是微信
+##环境以及客户端监测
+
+### 浏览器检测 
+
+#### 判断是不是微信
 ~~~
 /**
 * 检查判断是不是微信浏览器
@@ -35,3 +40,33 @@ if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
         return false;
 }
 ~~~
+
+### 获取用户真实IP
+~~~
+/**
+ * 获取客户端真实的ip地址
+ * @return string
+ */
+function getIp()
+{
+    if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")) {
+        $ip = getenv("HTTP_CLIENT_IP");
+    } else {
+        if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown")) {
+            $ip = getenv("HTTP_X_FORWARDED_FOR");
+        } else {
+            if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown")) {
+                $ip = getenv("REMOTE_ADDR");
+            } else {
+                if (isset ($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown")) {
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                } else {
+                    $ip = "unknown";
+                }
+            }
+        }
+    }
+    return ($ip);
+}
+~~~
+> 使用 echo getIp();
